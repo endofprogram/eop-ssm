@@ -4,7 +4,6 @@ import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration.Dynamic;
 
-import org.eop.common.filter.RequestResponseLoggingFilter;
 import org.eop.ssm.config.RootConfig;
 import org.eop.ssm.web.config.WebConfig;
 import org.eop.ssm.web.config.security.WebSecurityConfig;
@@ -54,8 +53,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
 		characterEncodingFilter.setEncoding("UTF-8");
 		characterEncodingFilter.setForceEncoding(true);
-		RequestResponseLoggingFilter requestResponseLoggingFilter = new RequestResponseLoggingFilter();
-		return new Filter[] {characterEncodingFilter, requestResponseLoggingFilter};
+		return new Filter[] {characterEncodingFilter};
 	}
 	
 	@Override

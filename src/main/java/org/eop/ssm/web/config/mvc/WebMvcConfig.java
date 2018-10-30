@@ -48,8 +48,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		configurer.enable();
 	}
 	
+	@Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
-		registry.jsp("", ".jsp");
+		registry.jsp("/", ".jsp");
 	}
 	
 	@Override
