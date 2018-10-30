@@ -35,4 +35,14 @@ public class ExampleController {
 	public String logout() {
 		return "example/logout";
 	}
+	
+	@RequestMapping("/nopermit")
+	public String nopermit() {
+		return "example/nopermit";
+	}
+	
+	@RequestMapping("/deny")
+	public String deny() {
+		return "example/deny";
+	}
 }

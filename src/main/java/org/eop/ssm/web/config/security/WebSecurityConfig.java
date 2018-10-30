@@ -1,9 +1,12 @@
 package org.eop.ssm.web.config.security;
 
-import org.eop.ssm.web.config.security.access.handler.JsonAccessDeniedHandler;
+import java.util.Arrays;
+
+import org.eop.ssm.web.config.security.access.decision.CompositeAccessDecisionManager;
+import org.eop.ssm.web.config.security.access.decision.RoleAccessDecisionVoter;
+import org.eop.ssm.web.config.security.access.decision.UriAccessDecisionVoter;
 import org.eop.ssm.web.config.security.login.handler.JsonAuthenticationFailureHandler;
 import org.eop.ssm.web.config.security.login.handler.JsonAuthenticationSuccessHandler;
-import org.eop.ssm.web.config.security.logout.handler.JsonLogoutSuccessHandler;
 import org.eop.ssm.web.config.security.password.FakePasswordEncoder;
 import org.eop.ssm.web.config.security.service.FakeUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+			.accessDecisionManager(new CompositeAccessDecisionManager(
+				Arrays.asList(new RoleAccessDecisionVoter(), new UriAccessDecisionVoter())))
 			.anyRequest().authenticated()
 			.and().formLogin()
 			.loginPage("/example/login")
@@ -51,7 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			//.logoutSuccessHandler(new JsonLogoutSuccessHandler())
 			.permitAll()
 			.and().exceptionHandling()
-			.accessDeniedHandler(new JsonAccessDeniedHandler());
+			.accessDeniedPage("/example/deny")
+			/*.accessDeniedHandler(new JsonAccessDeniedHandler())*/;
 	}
 	
 	@Override
