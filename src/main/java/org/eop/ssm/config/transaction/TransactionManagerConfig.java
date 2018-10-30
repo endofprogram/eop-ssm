@@ -11,8 +11,8 @@ import com.alibaba.druid.pool.DruidDataSource;
  * @author lixinjie
  * @since 2018-08-08
  */
-@Configuration
-@EnableTransactionManagement
+//@Configuration
+//@EnableTransactionManagement
 public class TransactionManagerConfig {
 
 	@Bean

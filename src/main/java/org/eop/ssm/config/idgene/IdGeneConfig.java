@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @author lixinjie
  * @since 2018-08-08
  */
-@Configuration
+//@Configuration
 public class IdGeneConfig {
 
 	@Bean

@@ -21,8 +21,8 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author lixinjie
  * @since 2018-08-08
  */
-@Configuration
-@PropertySource(value = "classpath:redis/redis.properties", ignoreResourceNotFound = true)
+//@Configuration
+//@PropertySource(value = "classpath:redis/redis.properties", ignoreResourceNotFound = true)
 public class RedisConfig {
 	
 	@Bean

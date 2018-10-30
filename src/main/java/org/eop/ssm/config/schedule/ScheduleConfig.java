@@ -12,9 +12,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
  * @author lixinjie
  * @since 2018-08-08
  */
-@Configuration
-@EnableScheduling
-@PropertySource(value = "classpath:schedule/schedule.properties", ignoreResourceNotFound = true)
+//@Configuration
+//@EnableScheduling
+//@PropertySource(value = "classpath:schedule/schedule.properties", ignoreResourceNotFound = true)
 public class ScheduleConfig {
 	
 	@Scheduled(cron = "${schedule.cron}")

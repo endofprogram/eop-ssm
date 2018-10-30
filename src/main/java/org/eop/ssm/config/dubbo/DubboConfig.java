@@ -17,10 +17,10 @@ import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
  * @author lixinjie
  * @since 2018-08-16
  */
-@Configuration
-@DubboComponentScan(basePackages = {"org.eop.ssm.**.dubbo.provider", "org.eop.ssm.**.dubbo.consumer"})
-@ComponentScan(basePackages = {"org.eop.ssm.**.dubbo.consumer"})
-@PropertySource(value = "classpath:dubbo/dubbo.properties", ignoreResourceNotFound = true)
+//@Configuration
+//@DubboComponentScan(basePackages = {"org.eop.ssm.**.dubbo.provider", "org.eop.ssm.**.dubbo.consumer"})
+//@ComponentScan(basePackages = {"org.eop.ssm.**.dubbo.consumer"})
+//@PropertySource(value = "classpath:dubbo/dubbo.properties", ignoreResourceNotFound = true)
 public class DubboConfig {
 
 	@Bean

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Primary;
  * @author lixinjie
  * @since 2018-08-08
  */
-@Configuration
+//@Configuration
 public class HttpInvokerConfig {
 
 	@Primary
