@@ -2,6 +2,7 @@ package org.eop.ssm.web.config.security;
 
 import java.util.Arrays;
 
+import org.eop.ssm.web.config.security.access.decision.AttributeAccessDecisionVoter;
 import org.eop.ssm.web.config.security.access.decision.CompositeAccessDecisionManager;
 import org.eop.ssm.web.config.security.access.decision.RoleAccessDecisionVoter;
 import org.eop.ssm.web.config.security.access.decision.UriAccessDecisionVoter;
@@ -38,7 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.accessDecisionManager(new CompositeAccessDecisionManager(
-				Arrays.asList(new RoleAccessDecisionVoter(), new UriAccessDecisionVoter())))
+				Arrays.asList(new AttributeAccessDecisionVoter(), new RoleAccessDecisionVoter(),
+						new UriAccessDecisionVoter())))
 			.anyRequest().authenticated()
 			.and().formLogin()
 			.loginPage("/example/login")
@@ -56,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			//.logoutSuccessHandler(new JsonLogoutSuccessHandler())
 			.permitAll()
 			.and().exceptionHandling()
-			.accessDeniedPage("/example/deny")
+			.accessDeniedPage("/example/deny")//转发
 			/*.accessDeniedHandler(new JsonAccessDeniedHandler())*/;
 	}
 	

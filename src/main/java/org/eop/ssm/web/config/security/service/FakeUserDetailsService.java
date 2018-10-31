@@ -18,8 +18,11 @@ public class FakeUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		if ("admin".equals(username)) {
-			return new User("admin", "123", Arrays.asList(new RoleGrantedAuthority("ROLE_Admin"),
-					new UriGrantedAuthority("/example/index")));
+			return new User("admin", "123", Arrays.asList(new RoleGrantedAuthority("ROLE_Admin")));
+		}
+		if ("user".equals(username)) {
+			return new User("user", "123", Arrays.asList(new RoleGrantedAuthority("ROLE_User"),
+					new UriGrantedAuthority("/example/index"), new UriGrantedAuthority("/example/permit")));
 		}
 		throw new UsernameNotFoundException("username '" + username + "' not found");
 	}
