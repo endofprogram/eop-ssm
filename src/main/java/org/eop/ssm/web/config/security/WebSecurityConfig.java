@@ -38,9 +38,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.accessDecisionManager(new CompositeAccessDecisionManager(
+			/*.accessDecisionManager(new CompositeAccessDecisionManager(
 				Arrays.asList(new AttributeAccessDecisionVoter(), new RoleAccessDecisionVoter(),
-						new UriAccessDecisionVoter())))
+						new UriAccessDecisionVoter())))*/
+			.mvcMatchers("/example/rolea").hasRole("A")
+			.mvcMatchers("/example/roleb").hasRole("B")
 			.anyRequest().authenticated()
 			.and().formLogin()
 			.loginPage("/example/login")

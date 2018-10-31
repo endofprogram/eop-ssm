@@ -50,4 +50,14 @@ public class ExampleController {
 	public String deny() {
 		return "example/deny";
 	}
+	
+	@RequestMapping("/rolea")
+	public String rolea() {
+		return "example/rolea";
+	}
+	
+	@RequestMapping("/roleb")
+	public String roleb() {
+		return "example/roleb";
+	}
 }
