@@ -6,11 +6,13 @@ import java.util.Date;
  * @author lixinjie
  * @since 2018-10-31
  */
-public interface FilterInvocationSecurityMetadataSourceReload {
+public interface SecurityMetadataSourceLoader {
 
 	Date getLastModified();
 	
-	Date getLastReloaded();
+	Date getLastLoaded();
+	
+	void load();
 	
 	void reload();
 }

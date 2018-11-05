@@ -60,4 +60,14 @@ public class ExampleController {
 	public String roleb() {
 		return "example/roleb";
 	}
+	
+	@RequestMapping("/rolec")
+	public String rolec() {
+		return "example/rolec";
+	}
+	
+	@RequestMapping("/roled")
+	public String roled() {
+		return "example/roled";
+	}
 }

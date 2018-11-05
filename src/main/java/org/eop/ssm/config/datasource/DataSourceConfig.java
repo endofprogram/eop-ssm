@@ -13,8 +13,8 @@ import com.alibaba.druid.pool.DruidDataSource;
  * @author lixinjie
  * @since 2018-08-08
  */
-//@Configuration
-//@PropertySource(value = "classpath:db/db.properties", ignoreResourceNotFound = true)
+@Configuration
+@PropertySource(value = "classpath:db/db.properties", ignoreResourceNotFound = true)
 public class DataSourceConfig {
 
 	@Bean

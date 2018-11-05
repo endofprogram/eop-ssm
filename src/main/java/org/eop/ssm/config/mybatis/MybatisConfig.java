@@ -14,8 +14,8 @@ import com.alibaba.druid.pool.DruidDataSource;
  * @author lixinjie
  * @since 2018-08-08
  */
-//@Configuration
-//@MapperScan(basePackages = {"org.eop.ssm.**.mapper"}, sqlSessionFactoryRef = "sqlSessionFactory")
+@Configuration
+@MapperScan(basePackages = {"org.eop.ssm.**.mapper"}, sqlSessionFactoryRef = "sqlSessionFactory")
 public class MybatisConfig {
 
 	@Bean

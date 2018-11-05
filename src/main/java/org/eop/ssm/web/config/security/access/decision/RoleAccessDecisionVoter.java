@@ -20,6 +20,11 @@ public class RoleAccessDecisionVoter implements AccessDecisionVoter<FilterInvoca
 		if (authentication.getAuthorities().contains(new RoleGrantedAuthority("ROLE_Admin"))) {
 			return ACCESS_GRANTED;
 		}
+		for (ConfigAttribute attribute : attributes) {
+			if (authentication.getAuthorities().contains((Object)attribute)) {
+				return ACCESS_GRANTED;
+			}
+		}
 		return ACCESS_ABSTAIN;
 	}
 	

@@ -31,6 +31,12 @@ public class FakeUserDetailsService implements UserDetailsService {
 		if ("ub".equals(username)) {
 			return new User("ub", "123", Arrays.asList(new SimpleGrantedAuthority("ROLE_B")));
 		}
+		if ("uc".equals(username)) {
+			return new User("uc", "123", Arrays.asList(new RoleGrantedAuthority("ROLE_C")));
+		}
+		if ("ud".equals(username)) {
+			return new User("ud", "123", Arrays.asList(new RoleGrantedAuthority("ROLE_D")));
+		}
 		throw new UsernameNotFoundException("username '" + username + "' not found");
 	}
 

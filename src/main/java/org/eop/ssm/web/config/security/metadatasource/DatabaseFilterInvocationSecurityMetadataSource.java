@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.eop.ssm.web.config.security.metadatasource.attribute.RoleConfigAttribute;
 import org.eop.ssm.web.config.security.metadatasource.service.MetadataSourceService;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +34,14 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
  * @since 2018-10-31
  */
 public class DatabaseFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource,
-			FilterInvocationSecurityMetadataSourceReload {
+			SecurityMetadataSourceLoader {
 
 	private static final String HANDLER_MAPPING_INTROSPECTOR_BEAN_NAME = "mvcHandlerMappingIntrospector";
 	
 	private Map<RequestMatcher, Collection<ConfigAttribute>> requestMap;
 	
 	private Date lastModified;
-	private Date lastReloaded;
+	private Date lastLoaded;
 	
 	@Autowired
 	private ApplicationContext context;
@@ -82,28 +83,57 @@ public class DatabaseFilterInvocationSecurityMetadataSource implements FilterInv
 	}
 	
 	@Override
-	public Date getLastReloaded() {
-		return lastReloaded;
+	public Date getLastLoaded() {
+		return lastLoaded;
+	}
+	
+	@Override
+	public void load() {
+		lastModified = metadataSourceService.getLastModified();
+		lastLoaded = new Date();
+		requestMap = loadRequestMap();
 	}
 	
 	@Override
 	public void reload() {
 		lastModified = metadataSourceService.getLastModified();
-		if (lastReloaded == null || lastReloaded.before(lastModified)) {
-			lastReloaded = new Date();
-			LinkedHashMap<String, List<String>> urlRolesMappings = metadataSourceService.getAllUrlRolesMappings();
-			LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>> newRequestMap =
-					getRequestAttributesMappings(urlRolesMappings);
-			requestMap = newRequestMap;
+		if (lastLoaded == null || lastLoaded.before(lastModified)) {
+			lastLoaded = new Date();
+			requestMap = loadRequestMap();
 		}
 	}
 	
+	private LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>> loadRequestMap() {
+		LinkedHashMap<String, List<String>> urlRolesMappings = metadataSourceService.getAllUrlRolesMappings();
+		return buildRequestAttributesMappings(urlRolesMappings);
+	}
+	
 	private LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>
-		getRequestAttributesMappings(LinkedHashMap<String, List<String>> urlRolesMappings) {
+		buildRequestAttributesMappings(LinkedHashMap<String, List<String>> urlRolesMappings) {
 		LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>> requestAttributesMappings =
 				new LinkedHashMap<>(urlRolesMappings.size());
-		
+		for (Map.Entry<String, List<String>> entry : urlRolesMappings.entrySet()) {
+			requestAttributesMappings.put(getRequestMatcher(entry.getKey()), getConfigAttributes(entry.getValue()));
+		}
 		return requestAttributesMappings;
+	}
+	
+	private RequestMatcher getRequestMatcher(String urlPattern) {
+		if ("/**".equals(urlPattern)) {
+			return anyRequest();
+		}
+		if (urlPattern.endsWith("/**")) {
+			return antMatchers(urlPattern).get(0);
+		}
+		return mvcMatchers(urlPattern).get(0);
+	}
+	
+	private List<ConfigAttribute> getConfigAttributes(List<String> roles) {
+		List<ConfigAttribute> attributes = new ArrayList<>(roles.size());
+		for (String role : roles) {
+			attributes.add(new RoleConfigAttribute(role));
+		}
+		return attributes;
 	}
 
 	public RequestMatcher anyRequest() {
@@ -117,7 +147,7 @@ public class DatabaseFilterInvocationSecurityMetadataSource implements FilterInv
 	public List<RequestMatcher> antMatchers(HttpMethod httpMethod,
 			String... antPatterns) {
 		String method = httpMethod == null ? null : httpMethod.toString();
-		List<RequestMatcher> matchers = new ArrayList<RequestMatcher>();
+		List<RequestMatcher> matchers = new ArrayList<>();
 		for (String pattern : antPatterns) {
 			matchers.add(new AntPathRequestMatcher(pattern, method));
 		}
@@ -131,19 +161,19 @@ public class DatabaseFilterInvocationSecurityMetadataSource implements FilterInv
 	public List<RequestMatcher> regexMatchers(HttpMethod httpMethod,
 			String... regexPatterns) {
 		String method = httpMethod == null ? null : httpMethod.toString();
-		List<RequestMatcher> matchers = new ArrayList<RequestMatcher>();
+		List<RequestMatcher> matchers = new ArrayList<>();
 		for (String pattern : regexPatterns) {
 			matchers.add(new RegexRequestMatcher(pattern, method));
 		}
 		return matchers;
 	}
 	
-	public List<MvcRequestMatcher> mvcMatchers(String... mvcPatterns) {
+	public List<RequestMatcher> mvcMatchers(String... mvcPatterns) {
 		return mvcMatchers(null, mvcPatterns);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<MvcRequestMatcher> mvcMatchers(HttpMethod method,
+	public List<RequestMatcher> mvcMatchers(HttpMethod method,
 			String... mvcPatterns) {
 		boolean isServlet30 = ClassUtils.isPresent("javax.servlet.ServletRegistration",
 				getClass().getClassLoader());
@@ -156,8 +186,7 @@ public class DatabaseFilterInvocationSecurityMetadataSource implements FilterInv
 		}
 		HandlerMappingIntrospector introspector = this.context.getBean(HANDLER_MAPPING_INTROSPECTOR_BEAN_NAME,
 			HandlerMappingIntrospector.class);
-		List<MvcRequestMatcher> matchers = new ArrayList<MvcRequestMatcher>(
-				mvcPatterns.length);
+		List<RequestMatcher> matchers = new ArrayList<>(mvcPatterns.length);
 		for (String mvcPattern : mvcPatterns) {
 			MvcRequestMatcher matcher = new MvcRequestMatcher(introspector, mvcPattern);
 			if (isServlet30) {

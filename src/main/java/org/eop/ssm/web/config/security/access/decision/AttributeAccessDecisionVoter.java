@@ -25,10 +25,11 @@ public class AttributeAccessDecisionVoter implements AccessDecisionVoter<FilterI
 			}
 		}
 		for (ConfigAttribute attribute : attributes) {
-			if (attribute.toString().equals(authenticated)) {
+			if (attribute.getAttribute().equals(authenticated)) {
 				if (authentication == null || "anonymousUser".equals(authentication.getName())) {
 					return ACCESS_DENIED;
 				}
+				return ACCESS_GRANTED;
 			}
 		}
 		return ACCESS_ABSTAIN;

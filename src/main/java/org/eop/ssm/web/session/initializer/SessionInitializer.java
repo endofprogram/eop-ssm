@@ -7,9 +7,8 @@ import org.springframework.session.web.context.AbstractHttpSessionApplicationIni
  * @author lixinjie
  * @since 2018-08-08
  */
-public class SessionInitializer /*extends AbstractHttpSessionApplicationInitializer*/ {
+public class SessionInitializer extends AbstractHttpSessionApplicationInitializer {
 
-	/*
 	public SessionInitializer() {
 		//调用父类构造函数会导致rootAppContext的初始化
 		//且把SessionConfig注册进去，主要是为了
@@ -21,5 +20,5 @@ public class SessionInitializer /*extends AbstractHttpSessionApplicationInitiali
 		//所以SessionConfig应该注册在MVC初始化的类里
 		//的rootAppContext中而不是servletAppContext中
 		//super(SessionConfig.class);
-	}*/
+	}
 }

@@ -14,8 +14,8 @@ import org.springframework.session.web.http.HttpSessionStrategy;
  * @author lixinjie
  * @since 2018-08-08
  */
-//@EnableRedisHttpSession
-//@Configuration
+@EnableRedisHttpSession
+@Configuration
 @PropertySource(value = "classpath:session/session.properties", ignoreResourceNotFound = true)
 public class SessionConfig {
 
